@@ -1,6 +1,9 @@
 package com.code.top;
 
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * 给定一个整数数组 nums 和一个目标值 target，请你在该数组中找出和为目标值的那 两个 整数，并返回他们的数组下标。
  *
@@ -12,6 +15,9 @@ package com.code.top;
  *
  * 因为 nums[0] + nums[1] = 2 + 7 = 9
  * 所以返回 [0, 1]
+ *
+ *
+ * 此题目中有个局限，不能出现重复的元素 比如 3 + 3 = 6;
  *
  * 来源：力扣（LeetCode）
  * 链接：https://leetcode-cn.com/problems/two-sum
@@ -35,6 +41,23 @@ public class TowNumbersSum {
      * @return
      */
     public int[] twoSum1(int[] nums, int target) {
+
+        int[] res = new int[2];
+
+        for (int i =0; i< nums.length; i++){
+            int first_item = nums[i];
+
+            for (int j = i+1; j< nums.length; j++){
+                int next_item = nums[j];
+
+                if( first_item + next_item == target){
+                  res[0] = i;
+                  res[1] = j;
+                  return res;
+                }
+            }
+        }
+
         return null;
     }
 
@@ -49,6 +72,27 @@ public class TowNumbersSum {
      * @return
      */
     public int[] twoSum2(int[] nums, int target) {
+
+        int[] res = new int[2];
+
+        Map<Integer, Integer> hashMap = new HashMap<Integer, Integer>();
+
+        for (int i =0; i < nums.length; i++){
+            hashMap.put(nums[i], i);
+        }
+
+
+        for (int i =0; i< nums.length; i++){
+            int sub = target - nums[i];
+            // [3,2,4]
+            if (hashMap.containsKey(sub)  && hashMap.get(sub) != i){
+                res[0] = i;
+                res[1] = hashMap.get(sub);
+
+                return res;
+            }
+        }
+
         return null;
     }
 
@@ -62,9 +106,44 @@ public class TowNumbersSum {
      * @return
      */
     public int[] twoSum3(int[] nums, int target) {
+
+        int[] res = new int[2];
+        HashMap<Integer, Integer> hashMap = new HashMap<Integer, Integer>();
+
+        for (int i =0; i< nums.length; i++){
+            int sub = target - nums[i];
+
+            if (hashMap.containsKey(sub) && hashMap.get(sub) != i ){
+                res[0] = i;
+                res[1] = hashMap.get(sub);
+                return res;
+            }
+
+            hashMap.put(nums[i], i);
+        }
+
         return null;
     }
 
 
+    /***
+     * 这种解法最快
+     * @param nums
+     * @param target
+     * @return
+     */
+    public int[] twoSum4(int[] nums, int target) {
+        int indexArrayMax = 2047;
+        int[] indexArrays = new int[indexArrayMax + 1];
+        for (int i = 0; i < nums.length; i++) {
+            int diff = target - nums[i];
+            int index = diff & indexArrayMax;
+            if (indexArrays[index] != 0) {
+                return new int[] { indexArrays[index] - 1, i };
+            }
+            indexArrays[nums[i] & indexArrayMax] = i + 1;
+        }
+        throw new IllegalArgumentException("No two sum value");
+    }
 
 }
