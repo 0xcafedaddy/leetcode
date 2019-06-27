@@ -133,6 +133,62 @@ public class TwoNumbersAdd {
 
 
     /**
+     * 看过答案后做的一个版本
+     * @param l1
+     * @param l2
+     * @return
+     */
+    public ListNode addTwoNumbers3(ListNode l1, ListNode l2) {
+
+        ListNode head = new ListNode(-1);
+        ListNode currentNode = head;
+
+        ListNode p = l1;
+        ListNode q = l2;
+
+        // 节点进位值
+        int carry = 0;
+
+        while ( p != null || q != null ){       // 两个链表长度可能不一致
+
+            int sum = carry;
+
+            if(p != null){
+                sum += p.val;
+                p = p.next;
+            }
+
+            if(q != null){
+                sum += q.val;
+                q = q.next;
+            }
+
+            // 节点当前位置的值
+            int current = sum % 10;
+            carry = sum / 10;
+
+            ListNode node = new ListNode(current);
+
+            // 先将此结点指向当前的最后一个位置
+            // 将这两个点同时指向新产生的结点
+            // 将游标结点再指向新产生的结点
+            currentNode.next = node;
+//            currentNode = node;
+            currentNode = currentNode.next;
+        }
+
+        // 最后的进位
+        if(carry > 0){
+            currentNode.next = new ListNode(carry);
+        }
+
+        return head.next;
+    }
+
+
+
+
+    /**
      * 官方解法：
      * 就像你在纸上计算两个数字的和那样，我们首先从最低有效位也就是列表 l1l1 和 l2l2 的表头开始相加。由于每位数字都应当处于 0 \ldots 90…9 的范围内，我们计算两个数字的和时可能会出现 “溢出”。例如，5 + 7 = 125+7=12。在这种情况下，我们会将当前位的数值设置为 22，并将进位 carry = 1carry=1 带入下一次迭代。进位 carrycarry 必定是 00 或 11，这是因为两个数字相加（考虑到进位）可能出现的最大和为 9 + 9 + 1 = 199+9+1=19。
      *
@@ -216,7 +272,7 @@ public class TwoNumbersAdd {
         ListNode l22 = new ListNode(1);
         l2.next = l22;
 
-        ListNode listNode = add.addTwoNumbers(l1, l2);
+        ListNode listNode = add.addTwoNumbers3(l1, l2);
 
         while(listNode != null){
             System.out.printf(listNode.val + " --> ");
