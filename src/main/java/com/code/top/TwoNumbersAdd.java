@@ -36,6 +36,49 @@ public class TwoNumbersAdd {
     }
 
 
+
+
+    public ListNode test0630(ListNode l1, ListNode l2){
+
+        int carry = 0; // 进位
+
+        ListNode head = new ListNode(-1);
+        ListNode currentNode = head;  // 需要一个中间的游标节点来指向当前的最后一个链表节点的位置
+        while (l1 != null || l2 != null){
+
+            int sum = carry;
+
+            if(l1 != null){
+                sum += l1.val;
+                l1 = l1.next;
+            }
+
+            if(l2 !=null){
+                sum += l2.val;
+                l2 = l2.next;
+            }
+
+            int current = sum % 10;
+            carry = sum / 10 ;
+
+            ListNode node = new ListNode(current);
+
+            currentNode.next = node;
+            currentNode = node;
+
+        }
+
+        if(carry != 0){
+            currentNode.next = new ListNode(carry);
+        }
+
+        return head.next;
+    }
+
+
+
+
+
     /**
      * 最简单的解法：
      *  遍历两个链表，得到数字
